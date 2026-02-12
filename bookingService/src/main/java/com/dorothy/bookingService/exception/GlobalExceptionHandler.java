@@ -29,4 +29,22 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+    @ExceptionHandler(FlightNotFoundException.class)
+    public ResponseEntity<String> handleFlightNotFound(FlightNotFoundException ex) {
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(FlightInactiveException.class)
+    public ResponseEntity<String> handleInactiveFlight(FlightInactiveException ex) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(FlightServiceUnavailableException.class)
+    public ResponseEntity<String> handleFlightServiceDown(FlightServiceUnavailableException ex) {
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ex.getMessage());
+    }
 }

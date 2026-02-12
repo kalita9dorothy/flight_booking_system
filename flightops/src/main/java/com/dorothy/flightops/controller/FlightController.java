@@ -1,5 +1,6 @@
 package com.dorothy.flightops.controller;
 
+import com.dorothy.flightops.dto.FlightAvailabilityResponse;
 import com.dorothy.flightops.dto.FlightRequestDTO;
 import com.dorothy.flightops.dto.FlightResponseDTO;
 import com.dorothy.flightops.model.FlightStatus;
@@ -50,4 +51,10 @@ public class FlightController {
                                               @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         return flightService.getFlights(departureStation, status, page, size);
     }
+
+    @GetMapping("/{id}/availability")
+    public FlightAvailabilityResponse checkAvailability(@PathVariable Long id) {
+        return flightService.checkAvailability(id);
+    }
+
 }

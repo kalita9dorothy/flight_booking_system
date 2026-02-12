@@ -1,5 +1,6 @@
 package com.dorothy.flightops.service;
 
+import com.dorothy.flightops.dto.FlightAvailabilityResponse;
 import com.dorothy.flightops.dto.FlightRequestDTO;
 import com.dorothy.flightops.dto.FlightResponseDTO;
 import com.dorothy.flightops.exception.FlightAlreadyExistsException;
@@ -109,4 +110,13 @@ public class FlightServiceImpl implements FlightService{
 
         return flightsPage.map(this::mapToResponse);
     }
+
+    @Override
+    public FlightAvailabilityResponse checkAvailability(Long flightId) {
+
+        Flight flight = flightRepository.findByIdAndDeletedFalse(flightId).orElseThrow(() -> new FlightNotFoundException("Flight not found with id: " + flightId));
+
+        return new FlightAvailabilityResponse(flight.getId(), flight.getStatus());
+    }
+
 }

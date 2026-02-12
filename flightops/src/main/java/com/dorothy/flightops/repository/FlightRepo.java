@@ -23,4 +23,6 @@ public interface FlightRepo extends JpaRepository<Flight, Long> {
 
     Page<Flight> findByDepartureStationAndStatusAndDeletedFalse(String departureStation, FlightStatus status, Pageable pageable);
 
+    Optional<Flight> findByIdAndDeletedFalse(Long id);
+
 }

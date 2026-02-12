@@ -2,7 +2,9 @@ package com.dorothy.bookingService.service;
 
 import com.dorothy.bookingService.dto.BookingCreateRequestDTO;
 import com.dorothy.bookingService.dto.BookingStatusResponseDTO;
+import com.dorothy.bookingService.dto.FlightAvailabilityResponse;
 import com.dorothy.bookingService.event.BookingCreatedEvent;
+import com.dorothy.bookingService.exception.FlightInactiveException;
 import com.dorothy.bookingService.model.Booking;
 import com.dorothy.bookingService.model.BookingStatus;
 import com.dorothy.bookingService.repository.BookingRepo;
@@ -16,8 +18,15 @@ public class BookingService {
 
     private final BookingRepo bookingRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final FlightOpsClient flightOpsClient;
 
     public Booking createBooking(BookingCreateRequestDTO request) {
+
+        FlightAvailabilityResponse availability = flightOpsClient.checkFlightAvailability(request.getFlightId());
+
+        if (!isBookable(availability.getStatus())) {
+            throw new FlightInactiveException("Booking not allowed for flight status: " + availability.getStatus());
+        }
 
         Booking booking = Booking.builder().flightId(request.getFlightId())
                         .userEmail(request.getUserEmail()).seats(request.getSeats())
@@ -31,6 +40,11 @@ public class BookingService {
 
         return booking;
     }
+
+    private boolean isBookable(String status) {
+        return status.equals("SCHEDULED") || status.equals("DELAYED");
+    }
+
 
     public BookingStatusResponseDTO getBookingStatus(Long bookingId) {
 

@@ -1,5 +1,6 @@
 package com.dorothy.flightops.service;
 
+import com.dorothy.flightops.dto.FlightAvailabilityResponse;
 import com.dorothy.flightops.dto.FlightRequestDTO;
 import com.dorothy.flightops.dto.FlightResponseDTO;
 import com.dorothy.flightops.model.FlightStatus;
@@ -20,5 +21,7 @@ public interface FlightService {
     void deleteFlight(String flightNumber);
 
     Page<FlightResponseDTO> getFlights(String departureStation, FlightStatus status, int page, int size);
+
+    FlightAvailabilityResponse checkAvailability(Long flightId);
 
 }
